@@ -46,7 +46,12 @@ p <- plot_ly() |>
     mode = "markers",
     text = ~tooltip,
     hoverinfo = "text",
-    marker = list(size = 5.5, color = "#1e40af", opacity = 0.55)
+    marker = list(
+      size = 6,
+      color = "#6366f1",
+      opacity = 0.65,
+      line = list(width = 0.5, color = "#ffffff")
+    )
   ) |> 
   add_trace(
     data = feat_data,
@@ -57,16 +62,25 @@ p <- plot_ly() |>
     mode = "markers",
     text = ~tooltip,
     hoverinfo = "text",
-    marker = list(size = 5.5, color = "#ea580c", opacity = 0.55)
+    marker = list(
+      size = 6,
+      color = "#f43f5e",
+      opacity = 0.65,
+      line = list(width = 0.5, color = "#ffffff")
+    )
   ) |> 
   layout(
     title = list(
-      text = "<b>Interactive Billboard Hot 100 Explorer (2,569 Observations)</b>",
-      font = list(size = 15)
+      text = "<b>Drake Billboard Hot 100 Chart Footprint</b>",
+      font = list(size = 15, color = "#0f172a")
     ),
     xaxis = list(title = "Chart Date", showgrid = TRUE, gridcolor = "#f1f5f9"),
     yaxis = list(title = "Hot 100 Rank (1 is top)", autorange = "reversed", showgrid = TRUE, gridcolor = "#f1f5f9"),
-    hoverlabel = list(bgcolor = "white", font = list(size = 12)),
+    hoverlabel = list(
+      bgcolor = "#ffffff",
+      bordercolor = "#c7d2fe",
+      font = list(size = 12, family = "sans-serif", color = "#1e293b")
+    ),
     legend = list(orientation = "h", x = 0.35, y = 1.12),
     updatemenus = list(
       list(

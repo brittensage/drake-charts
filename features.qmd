@@ -27,41 +27,45 @@ yearly_counts <- drake_data |>
   count(year, role)
 
 ggplot(yearly_counts, aes(x = factor(year), y = n, fill = role)) +
-  geom_col(position = "stack", width = 0.7) +
+  geom_col(position = "stack", width = 0.68, color = "#ffffff", linewidth = 0.7) +
   scale_fill_manual(
-    values = c("Lead Artist" = "#1e40af", "Featured Artist" = "#ea580c")
+    values = c("Lead Artist" = "#6366f1", "Featured Artist" = "#f43f5e")
   ) +
   annotate(
     "text",
     x = 11, y = 160,
-    label = "2019: 77% of chart presence\npowered by features",
-    size = 3.3,
-    fontface = "italic",
-    color = "#b45309"
+    label = "✨ 2019: 77% of chart presence\npowered by features",
+    size = 3.4,
+    fontface = "bold",
+    color = "#e11d48"
   ) +
   annotate(
     "curve",
-    x = 11, y = 135, xend = 11, yend = 115,
+    x = 11, y = 138, xend = 11, yend = 118,
     curvature = 0.2,
-    arrow = arrow(length = unit(1.5, "mm")),
-    color = "#b45309"
+    linewidth = 0.9,
+    arrow = arrow(length = unit(2, "mm")),
+    color = "#e11d48"
   ) +
   labs(
-    title = "Annual Billboard Hot 100 Chart Weeks: Lead Singles vs. Guest Features",
-    subtitle = "In off-album years (2011, 2014, 2019, 2020), guest verses sustained over 50% to 77% of Drake's chart visibility",
+    title = "Annual Billboard Hot 100 Chart Weeks: Lead Singles vs. Features",
+    subtitle = "In off-album years, guest appearances sustained up to 77% of Drake's chart dominance",
     x = "Year",
     y = "Total Weekly Chart Entries",
-    fill = "Drake's Role",
+    fill = NULL,
     caption = "Source: TidyTuesday / Billboard.com Archive (2,569 total observations)"
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    plot.title = element_text(face = "bold", size = 14, color = "#0f172a"),
-    plot.subtitle = element_text(color = "#475569", margin = margin(b = 12)),
+    plot.title = element_text(face = "bold", size = 15, color = "#0f172a"),
+    plot.subtitle = element_text(color = "#64748b", margin = margin(b = 12)),
     legend.position = "top",
+    legend.text = element_text(face = "bold", color = "#334155", size = 11),
     panel.grid.minor = element_blank(),
     panel.grid.major.x = element_blank(),
-    panel.grid.major.y = element_line(color = "#f1f5f9")
+    panel.grid.major.y = element_line(color = "#f1f5f9"),
+    plot.background = element_rect(fill = "#ffffff", color = "#e0e7ff", linewidth = 1.2),
+    plot.margin = margin(16, 16, 16, 16)
   )
 ```
 

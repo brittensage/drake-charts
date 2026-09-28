@@ -62,26 +62,29 @@ drake_bb <- read_csv("data/drake_billboard.csv", show_col_types = FALSE) |>
   )
 
 ggplot(drake_bb, aes(x = week_date, y = week_position, color = role)) +
-  geom_point(alpha = 0.42, size = 1.9) +
-  geom_smooth(se = FALSE, method = "loess", span = 0.32, linewidth = 1.1) +
+  geom_point(alpha = 0.45, size = 2.0) +
+  geom_smooth(se = FALSE, method = "loess", span = 0.32, linewidth = 1.3) +
   scale_y_reverse(breaks = c(1, 10, 25, 50, 75, 100)) +
-  scale_color_manual(values = c("Lead Artist" = "#1e40af", "Featured Artist" = "#ea580c")) +
+  scale_color_manual(values = c("Lead Artist" = "#6366f1", "Featured Artist" = "#f43f5e")) +
   scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
   labs(
     title = "Drake on the Billboard Hot 100 (2009–2021)",
-    subtitle = "Tracking 2,569 weekly positions across lead and featured releases",
+    subtitle = "Tracking 2,569 weekly positions across lead singles & guest collaborations",
     x = "Year",
     y = "Billboard Hot 100 Rank (1 is top)",
-    color = "Drake's Role",
+    color = NULL,
     caption = "Source: TidyTuesday / Billboard.com Archive (2,569 observations)"
   ) +
   theme_minimal(base_size = 13) +
   theme(
     plot.title = element_text(face = "bold", size = 16, color = "#0f172a"),
-    plot.subtitle = element_text(color = "#475569", margin = margin(b = 12)),
+    plot.subtitle = element_text(color = "#64748b", margin = margin(b = 14)),
     legend.position = "top",
+    legend.text = element_text(face = "bold", color = "#334155", size = 11),
     panel.grid.minor = element_blank(),
-    panel.grid.major = element_line(color = "#f1f5f9")
+    panel.grid.major = element_line(color = "#f1f5f9"),
+    plot.background = element_rect(fill = "#ffffff", color = "#e0e7ff", linewidth = 1.2),
+    plot.margin = margin(16, 16, 16, 16)
   )
 ```
 
@@ -96,54 +99,118 @@ ggplot(drake_bb, aes(x = week_date, y = week_position, color = role)) +
 
 Alongside his historical Billboard dominance, Drake is one of the most-streamed artists in Spotify history, accumulating **over 140 billion streams**. 
 
+Explore Drake's top 10 most-streamed hits. **Hover over any track below to instantly play an audio preview** (or click to play). Move your mouse away to pause.
+
 ```{r}
 #| echo: false
 #| message: false
 #| warning: false
-#| fig-width: 9.5
-#| fig-height: 4.8
-#| dpi: 300
+#| results: asis
 
 library(tidyverse)
-library(scales)
+library(htmltools)
 
-songs_data <- read_csv("data/kworb_songs.csv", show_col_types = FALSE)
+previews <- read_csv("data/top_song_previews.csv", show_col_types = FALSE)
+max_streams <- max(previews$streams)
 
-top_10_spotify <- songs_data |> 
-  slice_head(n = 10) |> 
-  mutate(title = fct_reorder(title, streams))
+rows <- purrr::map(seq_len(nrow(previews)), function(i) {
+  row <- previews[i, ]
+  pct <- round((row$streams / max_streams) * 100, 1)
+  streams_b <- paste0(round(row$streams / 1e9, 2), "B streams")
+  role_class <- if (row$role == "Lead Artist") "lead" else "feature"
+  badge_style <- if (row$role == "Lead Artist") {
+    "background:#dbeafe; color:#1e40af; font-size:0.72rem; font-weight:600; padding:2px 8px; border-radius:9999px;"
+  } else {
+    "background:#ffedd5; color:#c2410c; font-size:0.72rem; font-weight:600; padding:2px 8px; border-radius:9999px;"
+  }
 
-ggplot(top_10_spotify, aes(x = streams / 1e9, y = title, fill = role)) +
-  geom_col(width = 0.7) +
-  geom_text(
-    aes(label = str_c(round(streams / 1e9, 2), "B")),
-    hjust = -0.15,
-    size = 3.6,
-    fontface = "bold",
-    color = "#1e293b"
-  ) +
-  scale_x_continuous(
-    labels = label_number(suffix = "B"),
-    expand = expansion(mult = c(0, 0.16))
-  ) +
-  scale_fill_manual(values = c("Lead Artist" = "#1e40af", "Featured Artist" = "#ea580c")) +
-  labs(
-    title = "Top 10 Drake Tracks on Spotify by Total Streams",
-    subtitle = "Streaming figures in billions; comparing lead tracks and featured appearances",
-    x = "Streams (Billions)",
-    y = NULL,
-    fill = "Drake's Role",
-    caption = "Source: kworb.net Spotify Songs Tracker"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(
-    plot.title = element_text(face = "bold", size = 15, color = "#0f172a"),
-    plot.subtitle = element_text(color = "#475569", margin = margin(b = 10)),
-    legend.position = "top",
-    panel.grid.major.y = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_line(color = "#e2e8f0")
+  tags$div(
+    class = "audio-chart-row",
+    `data-audio` = row$preview_url,
+    `data-title` = row$title,
+    tags$div(class = "audio-chart-rank", paste0("#", row$rank)),
+    tags$img(class = "audio-chart-art", src = row$artwork, alt = row$title),
+    tags$div(
+      class = "audio-bar-wrapper",
+      tags$div(
+        class = "audio-bar-title-row",
+        tags$span(class = "audio-bar-title", row$title),
+        tags$span(style = badge_style, row$role)
+      ),
+      tags$div(
+        class = "audio-bar-track",
+        tags$div(class = paste("audio-bar-fill", role_class), style = paste0("width: ", pct, "%;"))
+      )
+    ),
+    tags$div(class = "audio-chart-stat", streams_b)
   )
+})
+
+script <- tags$script(HTML("
+document.addEventListener('DOMContentLoaded', function() {
+  const audio = new Audio();
+  audio.preload = 'none';
+  const nowPlayingEl = document.getElementById('now-playing-title-home');
+  const waveEl = document.getElementById('audio-wave-home');
+  const rows = document.querySelectorAll('.audio-chart-container-home .audio-chart-row');
+  let currentSrc = '';
+
+  function playTrack(row) {
+    const src = row.getAttribute('data-audio');
+    const title = row.getAttribute('data-title');
+    if (!src) return;
+    rows.forEach(r => r.classList.remove('is-playing'));
+    row.classList.add('is-playing');
+    if (currentSrc !== src) {
+      audio.src = src;
+      currentSrc = src;
+    }
+    audio.play().then(() => {
+      if (nowPlayingEl) nowPlayingEl.textContent = 'Playing: ' + title;
+      if (waveEl) waveEl.style.display = 'inline-flex';
+    }).catch(() => {
+      if (nowPlayingEl) nowPlayingEl.textContent = 'Click to enable audio (' + title + ')';
+    });
+  }
+
+  function stopTrack() {
+    audio.pause();
+    rows.forEach(r => r.classList.remove('is-playing'));
+    if (nowPlayingEl) nowPlayingEl.textContent = 'Hover over a track to play';
+    if (waveEl) waveEl.style.display = 'none';
+  }
+
+  rows.forEach(row => {
+    row.addEventListener('mouseenter', () => playTrack(row));
+    row.addEventListener('mouseleave', stopTrack);
+    row.addEventListener('click', () => playTrack(row));
+  });
+});
+"))
+
+chart_widget <- tags$div(
+  class = "audio-chart-container audio-chart-container-home",
+  tags$div(
+    class = "audio-chart-header",
+    tags$div(
+      class = "audio-chart-prompt",
+      tags$span(style = "font-size: 1.25rem;", "🎧"),
+      tags$strong("Interactive Audio Jukebox:"),
+      tags$span("Hover over any bar below to hear an instant preview")
+    ),
+    tags$div(
+      class = "audio-now-playing",
+      tags$div(id = "audio-wave-home", class = "sound-wave", style = "display: none;",
+        tags$span(), tags$span(), tags$span(), tags$span()
+      ),
+      tags$span(id = "now-playing-title-home", "Hover over a track to play")
+    )
+  ),
+  tags$div(class = "audio-chart-list", rows),
+  script
+)
+
+cat(as.character(chart_widget))
 ```
 
 [Browse Full 500-Song Spotify Catalog &rarr;](spotify.html){.btn .btn-outline-primary .btn-sm}

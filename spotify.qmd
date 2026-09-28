@@ -200,35 +200,38 @@ top_daily <- songs_data |>
   mutate(title = fct_reorder(title, daily))
 
 ggplot(top_daily, aes(x = daily / 1e6, y = title, fill = role)) +
-  geom_col(width = 0.72) +
+  geom_col(width = 0.68, color = "#ffffff", linewidth = 0.6) +
   geom_text(
     aes(label = str_c(round(daily / 1e6, 2), "M/day")),
-    hjust = -0.15,
-    size = 3.5,
+    hjust = -0.12,
+    size = 3.6,
     fontface = "bold",
-    color = "#334155"
+    color = "#1e293b"
   ) +
   scale_x_continuous(
     labels = label_number(suffix = "M"),
-    expand = expansion(mult = c(0, 0.18))
+    expand = expansion(mult = c(0, 0.22))
   ) +
-  scale_fill_manual(values = c("Lead Artist" = "#2563eb", "Featured Artist" = "#f97316")) +
+  scale_fill_manual(values = c("Lead Artist" = "#6366f1", "Featured Artist" = "#f43f5e")) +
   labs(
     title = "Top 10 Drake Tracks by Daily Spotify Streams",
-    subtitle = "Current daily streaming pace in millions of plays per day",
+    subtitle = "Current streaming velocity in millions of plays per day",
     x = "Daily Streams (Millions)",
     y = NULL,
-    fill = "Artist Role",
+    fill = NULL,
     caption = "Source: kworb.net Spotify Artist Songs Tracker"
   ) +
   theme_minimal(base_size = 12) +
   theme(
     plot.title = element_text(face = "bold", size = 15, color = "#0f172a"),
-    plot.subtitle = element_text(color = "#475569", margin = margin(b = 10)),
+    plot.subtitle = element_text(color = "#64748b", margin = margin(b = 10)),
     legend.position = "top",
+    legend.text = element_text(face = "bold", color = "#334155", size = 11),
     panel.grid.major.y = element_blank(),
     panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_line(color = "#e2e8f0")
+    panel.grid.major.x = element_line(color = "#f1f5f9"),
+    plot.background = element_rect(fill = "#ffffff", color = "#e0e7ff", linewidth = 1.2),
+    plot.margin = margin(16, 16, 16, 16)
   )
 ```
 
