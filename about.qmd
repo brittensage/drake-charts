@@ -2,30 +2,16 @@
 title: "About"
 ---
 
-## Project Overview
+## About the Author
 
-This website analyzes Drake's historic music career by bringing together multi-source data across Billboard chart longevity, cross-platform DSP distribution, and global Spotify streaming numbers.
+- **Name:** Britten Kettler
+- **Email:** [b.kettler30@ncf.edu](mailto:b.kettler30@ncf.edu)
+- **GitHub:** [brittensage](https://github.com/brittensage)
+- **Project Repository:** [brittensage/drake-charts](https://github.com/brittensage/drake-charts)
+- **Institution:** [New College of Florida](https://www.ncf.edu)
 
-## Data Sources & Links
+This project was built for Data Science using R, tidyverse, and Quarto, examining Drake's historical Billboard longevity and global streaming dominance.
 
-1. **Spotify Top Songs Tracker (kworb.net):**
-   - Catalog of 547 charted songs tracking over **140.7 billion all-time Spotify streams** and 65.9 million daily streams.
-   - Sourced from [kworb.net Spotify Artist Tracker](https://kworb.net/spotify/artist/3TVXtAsR1Inumwj472S9r4_songs.html).
+## Data Sources
 
-2. **Songstats Cross-Platform DSP Monitoring:**
-   - Real-time catalog distribution and metadata for the track titled **"Drake"** by Alsago & Slight Shady across 184 country markets.
-   - Sourced from [Songstats](https://songstats.com/track/ul9j1yr4/drake).
-
-3. **Billboard Hot 100 Historical Archive (TidyTuesday):**
-   - **2,569 weekly observations** tracing every song where Drake was credited as a lead artist or featured performer between 2009 and 2021.
-   - Sourced from the official [TidyTuesday Billboard repository](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-09-14).
-
-4. **Billboard Official Artist Chart History:**
-   - Historical chart peak positions and weeks at #1.
-   - Sourced from [Billboard.com Drake Chart History](https://www.billboard.com/artist/drake/chart-history/).
-
-## Author
-
-- **Author:** Britten
-- **Course:** Data Science (*Preceptor's Primer for Bayesian Data Science*)
-- **Repository:** [brittensage/drake-milestone-5](https://github.com/brittensage/drake-milestone-5)
+The data for this project was gathered from three primary sources: historical Billboard Hot 100 weekly archives (2009–2021) curated by [TidyTuesday](https://github.com/rfordatascience/tidytuesday/tree/master/data/2021/2021-09-14) and [Billboard.com](https://www.billboard.com/artist/drake/chart-history/) covering 2,569 weekly charted observations; global Spotify catalog telemetry and streaming metrics compiled by the [kworb.net Spotify Artist Tracker](https://kworb.net/spotify/artist/3TVXtAsR1Inumwj472S9r4_songs.html) across 547 songs; and cross-platform digital distribution data from [Songstats](https://songstats.com/track/ul9j1yr4/drake).
